@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-3 Query with Backend</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+
+<h2>Ask GPT-3:</h2>
+<input type="text" id="questionInput" placeholder="Type your question here...">
+<button onclick="askGPTFunction()">Ask</button>
+<p id="answerOutput"></p>
+
+<script>
+    async function askGPTFunction() {
+        const question = document.getElementById('questionInput').value;
+
+        try {
+            const response = await fetch('http://localhost:3001/ask-gpt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: question })
+            });
+
+            const data = await response.json();
+            const answer = data.choices && data.choices[0] && data.choices[0].text.trim();
+            
+            document.getElementById('answerOutput').innerText = answer;
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('answerOutput').innerText = 'Error fetching response.';
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-3 Query</title>
+</head>
+<body>
+
+<h2>Ask GPT-3:</h2>
+<input type="text" id="questionInput" placeholder="Type your question here...">
+<button onclick="askGPTFunction()">Ask</button>
+<p id="answerOutput"></p>
+
+<script>
+    const OPENAI_API_URL = "https://api.openai.com/v1/engines/davinci/completions";
+    const OPENAI_API_KEY = "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"; // Replace with your OpenAI API key
+
+    async function askGPTFunction() {
+        const question = document.getElementById('questionInput').value;
+
+        const response = await fetch(OPENAI_API_URL, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${OPENAI_API_KEY}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                prompt: question,
+                max_tokens: 150
+            })
+        });
+
+        console.log(response);
+
+        const data = await response.json();
+        const answer = data.choices && data.choices[0] ? data.choices[0].text.trim() : "Unable to retrieve answer.";
+
+        
+        document.getElementById('answerOutput').innerText = answer;
+    }
+</script>
+
+</body>
+</html>
